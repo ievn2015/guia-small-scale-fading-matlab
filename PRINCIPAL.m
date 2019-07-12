@@ -1,26 +1,26 @@
-%% ESCUELA POLITÉCNICA NACIONAL
-%  Facultad de Ingeniería Eléctrica y Electrónica
-%  Asignatura: Comunicaciones Inalámbricas
-%  Integrantes: Báez Mayté, Herrera Darío, Zumárraga Felipe
+% ESCUELA POLITÃ‰CNICA NACIONAL
+%  Facultad de IngenierÃ­a ElÃ©ctrica y ElectrÃ³nica
+%  Asignatura: Comunicaciones InalÃ¡mbricas
+%  Integrantes: BÃ¡ez MaytÃ©, Herrera DarÃ­o, ZumÃ¡rraga Felipe
 %  Docente: PhD. Cecilia Paredes
-%  Implementación de canales multitrayecto con desvanecimiento a pequeña 
+%  ImplementaciÃ³n de canales multitrayecto con desvanecimiento a pequeÃ±a 
 %  escala
 
-%% Definición de variables y parámetros inciales
+% DefiniciÃ³n de variables y parÃ¡metros inciales
 clc; clear all;
-%Número total de repeticiones 
+%NÃºmero total de repeticiones 
 Ntrials = 2;
-%Número de subportadoras de datos
+%NÃºmero de subportadoras de datos
 Nd = 48; 
-%Número total de subportadoras disponibles
+%NÃºmero total de subportadoras disponibles
 N = 64; 
-%Número de bits agrupados en cada símbolo 
+%NÃºmero de bits agrupados en cada sÃ­mbolo 
 %2=QPSK, 4=16QAM
 m = 2;
-%Número niveles de la señal
+%NÃºmero niveles de la seÃ±al
 M = 2^m;
 %Para OFDM
-%Tamaño del prefijo cíclico
+%TamaÃ±o del prefijo cÃ­clico
 PC = N/4;
 %Valores de SNR para los canales
 snr = 0:2:30;
@@ -42,26 +42,26 @@ k=8;
 Tao=[0,1.5,4];
 Pdb=[0,-4,-8];
 
-%% Desarrollo de la simulación
+%% Desarrollo de la simulaciÃ³n
 for t=1:Ntrials
 
-    %Generación de bits aleatorios
+    %GeneraciÃ³n de bits aleatorios
     bitsTX = round(rand(Nd*m,1));
     
-    %Modulación de la cadena de bits
+    %ModulaciÃ³n de la cadena de bits
     simbolosTX = modulacion(bitsTX,m);
         
-    %Conversión de los datos a paralelo
+    %ConversiÃ³n de los datos a paralelo
     simbolosTX_paralelo = serieParalelo(simbolosTX,Nd);
         
-    %Modulación OFDM
+    %ModulaciÃ³n OFDM
     simbolosTX_ofdm =modulacionOFDM(simbolosTX_paralelo,N,PC);
     
-    %Conversión de los símbolos OFDM a serie
+    %ConversiÃ³n de los sÃ­mbolos OFDM a serie
     simbolosTX_serie = paraleloSerie(simbolosTX_ofdm);
         
     for i=1:length(snr)
-    %Paso de la señal por los diferentes canales
+    %Paso de la seÃ±al por los diferentes canales
     simbolos_AWGN = awgn(simbolosTX_serie,snr(i),'measured');
     simbolos_Ray = canal_rayleigh(simbolosTX_serie,snr(i),ts,fd,Tao,Pdb);
     simbolos_Ric = canal_rician(simbolosTX_serie,snr(i),ts,fd,Tao,Pdb,k);
@@ -91,7 +91,7 @@ for t=1:Ntrials
     bitsRX_Ric = demodular(simbolosRX_Ric_serie,m);
     bitsRX_Nak = demodular(simbolosRX_Nak_serie,m);
     
-    %Comparación de los datos transimitidos y recibidos
+    %ComparaciÃ³n de los datos transimitidos y recibidos
     %BER AWGN
     [No,tasa] = biterr(bitsTX,bitsRX_AWGN);
     BER_AWGN(t,i) = tasa;
@@ -108,7 +108,7 @@ for t=1:Ntrials
     disp(t);
 end
 
-%% Obtención de gráficas y resultados
+% ObtenciÃ³n de grÃ¡ficas y resultados
 %valor medio del BER QPSK
 BERm_AWGN = mean(BER_AWGN,1); 
 BERm_Ray = mean(BER_Rayleigh,1);
@@ -128,4 +128,4 @@ hold on;
 xlabel('SNR [dB]','Fontname','Times New Roman');
 ylabel('BER [dB]','Fontname','Times New Roman');
 legend('AWGN','Rayleigh','Rician','Nakagami');
-title('DESVANECIMIENTO A PEQUEÑA ESCALA','Fontname','Times New Roman');
+title('DESVANECIMIENTO A PEQUEÃ‘A ESCALA','Fontname','Times New Roman');
