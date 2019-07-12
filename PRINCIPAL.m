@@ -42,7 +42,7 @@ k=8;
 Tao=[0,1.5,4];
 Pdb=[0,-4,-8];
 
-%% Desarrollo de la simulación
+% Desarrollo de la simulación
 for t=1:Ntrials
 
     %Generación de bits aleatorios
